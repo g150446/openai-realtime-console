@@ -1,12 +1,19 @@
 import express from "express";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
+import https from "https";
 import "dotenv/config";
 
 const app = express();
 app.use(express.text());
 const port = process.env.PORT || 3000;
 const apiKey = process.env.OPENAI_API_KEY;
+
+// HTTPS configuration
+const options = {
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+};
 
 // Configure Vite middleware for React client
 const vite = await createViteServer({
@@ -110,6 +117,7 @@ app.use("*", async (req, res, next) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Express server running on *:${port}`);
+https.createServer(options, app).listen(port, () => {
+  console.log(`Express server running on https://localhost:${port}`);
+  console.log(`Access your app at https://your-droplet-ip:${port}`);
 });

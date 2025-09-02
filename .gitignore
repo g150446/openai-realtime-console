@@ -19,3 +19,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# certificate files
+server.key
+server.cert
